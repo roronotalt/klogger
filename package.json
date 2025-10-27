@@ -1,0 +1,28 @@
+{
+    "name": "@kasssandra/klogger",
+    "description": "A simple beautiful logger",
+    "author": "Roro",
+    "license": "MIT",
+    "keywords": [
+        "logger",
+        "logging",
+        "log",
+        "console",
+        "browser"
+    ],
+    "main": "dist/index.js",
+    "module": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "type": "module",
+    "version": "0.0.21-alpha",
+    "scripts": {
+        "build": "bun build src/index.ts --outdir dist --format esm && bun run build:types",
+        "build:types": "bunx tsc --declaration --emitDeclarationOnly --outDir dist"
+    },
+    "devDependencies": {
+        "@types/bun": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    }
+}

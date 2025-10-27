@@ -1,0 +1,39 @@
+# Source code (not needed in package)
+src/
+tests/
+
+# Development files
+.git/
+.gitignore
+.npmignore
+tsconfig.json
+bun.lock
+
+# Build artifacts we don't want
+*.tgz
+*.lcov
+coverage/
+
+# Logs and caches
+logs/
+*.log
+report.[0-9]*.json
+.eslintcache
+.cache/
+*.tsbuildinfo
+
+# Environment files
+.env*
+.env
+
+# IDE files
+.idea/
+.vscode/
+.cursor/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Scripts directory (if not needed in package)
+scripts/
