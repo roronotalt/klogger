@@ -24,19 +24,17 @@ const RESET = "\x1b[0m";
 
 export class KLogger {
     private level: KLoggerLevel;
-    private parent_procces: string[] | undefined;
+    private service_name: string;
 
     constructor({
         level = "info",
-        parent_procces,
         service_name = "UNKNOWN-SERVICE",
     }: Partial<{
         level: KLoggerLevel;
         service_name: string;
-        parent_procces: string[] | undefined;
     }> = {}) {
         this.level = level;
-        this.parent_procces = parent_procces?.slice(-2);
+        this.service_name = service_name;
 
         for (const level in default_levels) {
             if (
@@ -45,19 +43,7 @@ export class KLogger {
             ) {
                 (this as any)[level] = (message: any) => {
                     const prefix =
-                        (this.parent_procces && this.parent_procces.length > 0
-                            ? this.parent_procces
-                                  .map((word) =>
-                                      word
-                                          .toUpperCase()
-                                          .split("-")
-                                          .map((word) => word.slice(0, 3))
-                                          .join("-")
-                                  )
-                                  .join("->") +
-                              "->" +
-                              service_name.toUpperCase()
-                            : service_name.toUpperCase()) +
+                        this.service_name.toUpperCase() +
                         ` ${new Date().toISOString()}`;
 
                     console.log(
@@ -81,8 +67,24 @@ export class KLogger {
     }): KLogger {
         return new KLogger({
             level: level,
-            service_name: name,
-            parent_procces: [...(this.parent_procces ?? []), name],
+            service_name:
+                this.service_name
+                    .split("->")
+                    .slice(-2)
+                    .toSpliced(
+                        -1,
+                        1,
+                        name
+                            .split("->")
+                            .at(-1)
+                            ?.split("-")
+                            .map((word) => word.slice(0, 3))
+                            .join("-") ?? ""
+                    )
+                    .slice(-2)
+                    .join("->") +
+                "->" +
+                name.toUpperCase(),
         });
     }
 
