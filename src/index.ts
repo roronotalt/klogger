@@ -62,23 +62,27 @@ export class KLogger {
                 default_levels[level as keyof typeof default_levels] <=
                 default_levels[this.level as keyof typeof default_levels]
             ) {
-                (this as any)[level] = (
-                    message: any,
-                    sanitize: boolean = true
-                ) => {
+                (this as any)[level] = (...args: any[]) => {
                     const prefix =
                         this.service_name.toUpperCase() +
                         ` ${new Date().toISOString()}`;
 
-                    console.log(
-                        `${
-                            default_console_colors[
-                                level as keyof typeof default_console_colors
-                            ]
-                        }[${prefix}]${RESET} ${
-                            sanitize ? safe_stringify(message) : message
-                        }`
-                    );
+                    const sanitize =
+                        typeof args[args.length - 1] === "boolean"
+                            ? (args.pop() as boolean)
+                            : false;
+
+                    args.forEach((message) => {
+                        console.log(
+                            `${
+                                default_console_colors[
+                                    level as keyof typeof default_console_colors
+                                ]
+                            }[${prefix}]${RESET} ${
+                                sanitize ? safe_stringify(message) : message
+                            }`
+                        );
+                    });
                 };
             }
         }
@@ -114,11 +118,11 @@ export class KLogger {
         });
     }
 
-    public info(_message: any, _sanitize?: boolean): void {}
-    public error(_message: any, _sanitize?: boolean): void {}
-    public warn(_message: any, _sanitize?: boolean): void {}
-    public verbose(_message: any, _sanitize?: boolean): void {}
-    public debug(_message: any, _sanitize?: boolean): void {}
-    public silly(_message: any, _sanitize?: boolean): void {}
-    public http(_message: any, _sanitize?: boolean): void {}
+    public info(..._args: any[]): void {}
+    public error(..._args: any[]): void {}
+    public warn(..._args: any[]): void {}
+    public verbose(..._args: any[]): void {}
+    public debug(..._args: any[]): void {}
+    public silly(..._args: any[]): void {}
+    public http(..._args: any[]): void {}
 }

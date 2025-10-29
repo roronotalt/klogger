@@ -14,7 +14,7 @@
     "module": "dist/index.js",
     "types": "dist/index.d.ts",
     "type": "module",
-    "version": "0.0.28-alpha",
+    "version": "0.0.29-alpha",
     "scripts": {
         "build": "bun build src/index.ts --minify --outdir dist --format esm && bun run build:types",
         "build:types": "bunx tsc --declaration --emitDeclarationOnly --outDir dist"
