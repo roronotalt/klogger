@@ -50,9 +50,9 @@ export class KLogger {
                         ]
                     }[${this.service_name.toUpperCase()}]${RESET} ${new Date().toISOString()}]`;
 
-                    args.forEach((message) => {
+                    args.forEach((message, index) => {
                         typeof message === "object"
-                            ? (console.log(prefix),
+                            ? (index === 0 ? console.log(prefix) : null,
                               console.dir(message, { depth: 6 }))
                             : console.log(`${prefix} ${message}`);
                     });
