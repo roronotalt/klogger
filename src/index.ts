@@ -22,6 +22,27 @@ const default_console_colors = {
 
 const RESET = "\x1b[0m";
 
+const safe_stringify = (obj: any, max_depth: number = 6): string => {
+    const seen = new WeakSet();
+
+    const helper = (value: any, depth: number): any => {
+        if (depth > max_depth) return "[MaxDepth]";
+        if (typeof value === "object" && value !== null) {
+            if (seen.has(value)) return "[Circular]";
+            seen.add(value);
+            if (Array.isArray(value))
+                return value.map((v) => helper(v, depth + 1));
+            const out: Record<string, any> = {};
+            for (const [k, v] of Object.entries(value))
+                out[k] = helper(v, depth + 1);
+            return out;
+        }
+        return value;
+    };
+
+    return JSON.stringify(helper(obj, 0));
+};
+
 export class KLogger {
     private level: KLoggerLevel;
     private service_name: string;
@@ -41,7 +62,10 @@ export class KLogger {
                 default_levels[level as keyof typeof default_levels] <=
                 default_levels[this.level as keyof typeof default_levels]
             ) {
-                (this as any)[level] = (message: any) => {
+                (this as any)[level] = (
+                    message: any,
+                    sanitize: boolean = true
+                ) => {
                     const prefix =
                         this.service_name.toUpperCase() +
                         ` ${new Date().toISOString()}`;
@@ -51,7 +75,9 @@ export class KLogger {
                             default_console_colors[
                                 level as keyof typeof default_console_colors
                             ]
-                        }[${prefix}]${RESET} ${message}`
+                        }[${prefix}]${RESET} ${
+                            sanitize ? safe_stringify(message) : message
+                        }`
                     );
                 };
             }
@@ -88,11 +114,11 @@ export class KLogger {
         });
     }
 
-    public info(_: any) {}
-    public error(_: any) {}
-    public warn(_: any) {}
-    public verbose(_: any) {}
-    public debug(_: any) {}
-    public silly(_: any) {}
-    public http(_: any) {}
+    public info(_message: any, _sanitize?: boolean): void {}
+    public error(_message: any, _sanitize?: boolean): void {}
+    public warn(_message: any, _sanitize?: boolean): void {}
+    public verbose(_message: any, _sanitize?: boolean): void {}
+    public debug(_message: any, _sanitize?: boolean): void {}
+    public silly(_message: any, _sanitize?: boolean): void {}
+    public http(_message: any, _sanitize?: boolean): void {}
 }
