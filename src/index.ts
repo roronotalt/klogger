@@ -74,7 +74,7 @@ export class KLogger {
                     .toSpliced(
                         -1,
                         1,
-                        name
+                        this.service_name
                             .split("->")
                             .at(-1)
                             ?.split("-")
