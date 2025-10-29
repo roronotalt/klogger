@@ -52,8 +52,9 @@ export class KLogger {
 
                     args.forEach((message, index) => {
                         typeof message === "object"
-                            ? (index === 0 ? console.log(prefix) : null,
-                              console.dir(message, { depth: 6 }))
+                            ? index === 0
+                                ? console.log(prefix, message)
+                                : console.log(message)
                             : console.log(`${prefix} ${message}`);
                     });
                 };
